@@ -9,10 +9,11 @@ class KruskalAlgo:
 
     mst = deque()
 
-    def __init__(self, G):
+    def __init__(self, G, type):
 
         #build priority queue
-        pq = IndexMinPQ(len(G.E()))
+        print len(G.E())
+        pq = IndexMinPQ(len(G.E()), type)
 
         #sort edges
         for e in G.E():
@@ -37,7 +38,8 @@ class KruskalAlgo:
 
 G = EdgeWeightedGraph()
 G.readGraph("tinyEWG.txt")
-mst = KruskalAlgo(G)
+type = "distance"
+mst = KruskalAlgo(G, type)
 sum = 0
 for e in mst.edges():
     print e.toString()

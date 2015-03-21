@@ -18,11 +18,11 @@ class Network:
         for line in f:
             v1, v2, v3 = line.split(" ")
             weight = float(v3)
-            self.graph.addEdge(v1, v2, weight)
+            self.graph.addEdge(v1, v2, weight, 0, 0)
 
     def createPath(self):
-        e1 = Edge("A","B",0.0)
-        e2 = Edge("B","C",0.0)
+        e1 = Edge("A","B",0.0, 0, 0)
+        e2 = Edge("B","C",0.0, 0, 0)
         self.path.append(e1)
         self.path.append(e2)
 

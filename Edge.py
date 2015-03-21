@@ -5,14 +5,15 @@ class Edge:
     w = None # vertex 2
     weight = None # weight
 
-    def __init__(self, v, w, wt, tt, c):
+    #travelTime and costs added becos question 5
+    def __init__(self, v, w, wt, travelTime, costs):
         self.v = v
         self.w = w
         self.weight = wt
 
         ''' question 5 '''
-        self.travelTime = tt
-        self.costs = c
+        self.travelTime = travelTime
+        self.costs = costs
         ''' question 5 '''
 
     # return either endpoint
@@ -41,6 +42,7 @@ class Edge:
     def __eq__(self, other):
         return self.weight == other.weight
 
+    #travelTime and costs added becos question 5
     def toString(self):
         return str(self.v) + "-" + \
                str(self.w) + " weight/distance: " + \

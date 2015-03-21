@@ -14,8 +14,8 @@ class PrimMST:
     count = 0
     path = []
 
-    def __init__(self, G):
-        self.pq = IndexMinPQ(len(G.E()))
+    def __init__(self, G, type):
+        self.pq = IndexMinPQ(len(G.E()), type)
 
         for v in G.V():
             self.marked[v] = False
@@ -48,8 +48,9 @@ class PrimMST:
         return self.mst
 
     ''' start question 3a '''
-    def createPath(self, v, w, weight):
-        e1 = Edge(v,w,weight)
+    #travelTime and costs added becos question 5
+    def createPath(self, v, w, weight, travelTime, costs):
+        e1 = Edge(v,w,weight, travelTime, costs)
         self.path.append(e1)
 
     def drawGraph(self, filename):
@@ -73,13 +74,13 @@ class PrimMST:
 
 G = EdgeWeightedGraph()
 G.readGraph("tinyEWG.txt")
-mst = PrimMST(G)
+mst = PrimMST(G, "distance")
 sum = 0
 
 for e in mst.edges():
     eV = e.either() #get left node
     eW = e.other(eV)    #get right node
-    mst.createPath(eV, eW, e.weight)
+    mst.createPath(eV, eW, e.weight, 0, 0)
     print e.toString()
     sum += e.weight
 

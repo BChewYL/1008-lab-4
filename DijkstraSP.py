@@ -14,13 +14,13 @@ class DijkstraSP:
     pq = None
     path = []
 
-    def __init__(self, G, s):
+    def __init__(self, G, s, type):
         for v in G.V():
             self.marked[v] = False
             self.edgeTo[v] = None
             self.distTo[v] = float('Inf')
 
-        self.pq = IndexMinPQ(len(G.V()))
+        self.pq = IndexMinPQ(len(G.V()), type)
         self.distTo[s] = 0.0
         self.pq.insert(s, 0.0)
         while not self.pq.isEmpty():
@@ -51,8 +51,8 @@ class DijkstraSP:
             dest = src
         return path
 
-    def createPath(self, v, w, weight):
-         e1 = Edge(v,w,weight)
+    def createPath(self, v, w, weight, travelTime, costs):
+         e1 = Edge(v,w,weight, travelTime, costs)
          self.path.append(e1)
 
     def drawGraph(self, filename):
@@ -75,11 +75,11 @@ class DijkstraSP:
 G = EdgeWeightedGraph()
 G.readGraph("tinyEWG.txt")
 s = G.V()[0]
-sp = DijkstraSP(G, s)
+sp = DijkstraSP(G, s, "distance")
 for v in G.V():
     print str(s) + " to " + str(v) + " (" + str(sp.distTo[v]) + "):",
     for e in reversed(sp.pathTo(v)):
-        sp.createPath(e.src(), e.dest(), e.weight)
+        sp.createPath(e.src(), e.dest(), e.weight, 0, 0)
         print str(e.src())+ "->" + str(e.dest()) + " " + str(e.weight) + " ",
     print
 

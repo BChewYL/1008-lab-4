@@ -6,6 +6,7 @@ class EdgeWeightedGraph:
 
     adjList = {} #dictonary
 
+    #travelTime and costs added becos question 5
     def readGraph(self, file):
         f = open(file, 'r')
         for line in f:
@@ -13,8 +14,10 @@ class EdgeWeightedGraph:
             v1 = int(v1)
             v2 = int(v2)
             wt = float(v3)
+            travelTime = 0
+            cost = 0
 
-            e = Edge(v1, v2, wt)
+            e = Edge(v1, v2, wt, travelTime, cost)
 
             if v1 in self.adjList:
                 if self.isNeighbour(v1, v2) is False:
@@ -36,8 +39,9 @@ class EdgeWeightedGraph:
                 return True
         return False
 
-    def addEdge(self, v, w, wt):
-        e = Edge(v, w, wt)
+    #travelTime and costs added becos question 5
+    def addEdge(self, v, w, wt, travelTime, costs):
+        e = Edge(v, w, wt, travelTime, costs)
 
         if v in self.adjList:
             if self.isNeighbour(v, w) is False:

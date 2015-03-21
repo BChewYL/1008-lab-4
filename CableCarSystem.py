@@ -81,8 +81,9 @@ class CableCarSystem:
                     edges.append(e)
         return edges
 
-    def reduceOverallCableLength(self):
-        self.pq = IndexMinPQ(len(self.E()))
+    #prims algo
+    def primsAlgo(self, type):
+        self.pq = IndexMinPQ(len(self.E()), type)
 
         for v in self.V():
             self.marked[v] = False
@@ -101,6 +102,7 @@ class CableCarSystem:
             if not self.marked[v]: self.visit(v)
             if not self.marked[w]: self.visit(w)
 
+    #prims algo
     def visit(self, v):
         # mark v and add to pq all edges
         # from v to unmarked vertices
@@ -119,7 +121,7 @@ class CableCarSystem:
         self.path.append(e1)
 
     # draw the graph
-    def drawGraph(self, filename):
+    def drawGraph(self, filename, type):
         # create an empty undirected graph
         G = pgv.AGraph('graph myGraph {}')
 
@@ -128,7 +130,12 @@ class CableCarSystem:
             for e in self.adj(n):
                 x = e.either()
                 y = e.other(x)
-                G.add_edge(x, y, e.weight, label=e.weight)
+                if type is "distance":
+                    G.add_edge(x, y, e.weight, label=e.weight)
+                elif type is "costs":
+                    G.add_edge(x, y, e.costs, label=e.costs)
+                elif type is "travelTime":
+                    G.add_edge(x, y, e.travelTime, label=e.travelTime)
 
         #highlight edges in path with red color
         for e in self.path:
@@ -144,9 +151,10 @@ class CableCarSystem:
 
 ccs = CableCarSystem()
 ccs.readGraph("cablecar.txt")
-ccs.reduceOverallCableLength()
+type = "distance"    #question 5a - distance, question 5b - costs, question 5c - travelTime
+ccs.primsAlgo(type)
 for e in ccs.edges():
     eV = e.either() #get left node
     eW = e.other(eV) #get right node
     ccs.createPath(eV, eW, e.weight, e.travelTime, e.costs)
-ccs.drawGraph("cablecargenerate.png")
+ccs.drawGraph("cablecargenerate.png", type)

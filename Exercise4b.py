@@ -6,8 +6,10 @@ from DirectedEdge import DirectedEdge
 import pygraphviz as pgv
 
 class Question4b:
+
     graph = EdgeWeightedGraph()
     storeEdges = []
+
     def __init__(self):
         graph = EdgeWeightedGraph()
 
@@ -16,7 +18,9 @@ class Question4b:
         for line in f:
             v1, v2, v3 = line.split(" ")
             weight = float(v3)
-            self.graph.addEdge(v1, v2, weight)
+            travelTime = 0
+            costs = 0
+            self.graph.addEdge(v1, v2, weight, travelTime, costs)
 
         self.getVerticesFromEither(nodeName)
         self.displayVerticesAndDistance(nodeWeight, nodeName)
@@ -43,5 +47,6 @@ class Question4b:
                 #print "start node: "+str(self.storeEdges[x].v),
                 #print " end node: "+str(self.storeEdges[x].w),
                 #print " weight: "+str(self.storeEdges[x].weight)
+
 q4b = Question4b()
 q4b.readGraph("tinyEWG.txt", "5", 0.36)
