@@ -5,6 +5,7 @@ from Edge import Edge
 from collections import deque
 from EdgeWeightedGraph import EdgeWeightedGraph
 from IndexMinPQ import IndexMinPQ
+from DirectedEdge import DirectedEdge
 import pygraphviz as pgv
 
 class CableCarSystem:
@@ -14,6 +15,12 @@ class CableCarSystem:
     pq = None
     count = 0
     adjList = {} #dictonary
+
+    ''' question 5c '''
+    distTo = {}
+    edgeTo = {}
+    marked = {}
+    ''' question 5c '''
 
     def __init__(self):
         graph = EdgeWeightedGraph()
@@ -116,6 +123,44 @@ class CableCarSystem:
     def edges(self):
         return self.mst
 
+    def dijkstraAlgo(self, G, s, type):
+        for v in G.V():
+            self.marked[v] = False
+            self.edgeTo[v] = None
+            self.distTo[v] = float('Inf')
+
+        self.pq = IndexMinPQ(len(G.V()), type)
+        self.distTo[s] = 0.0
+        self.pq.insert(s, 0.0)
+        while not self.pq.isEmpty():
+            v = self.pq.delMin()
+            self.marked[v] = True
+            #print "Relaxing vertex " + str(v)
+            for e in G.adj(v):
+                self.relax(v, e.other(v), e)
+
+    def relax(self, v, w, e):
+        if self.distTo[w] > self.distTo[v] + e.weight:
+            self.distTo[w] = self.distTo[v] + e.weight
+            self.edgeTo[w] = e
+            if self.pq.contains(w):
+                self.pq.change(w, self.distTo[w])
+            elif self.marked[w] is False:
+                self.pq.insert(w, self.distTo[w])
+
+    def pathTo(self, v):
+        path = []
+        e = self.edgeTo[v]
+        dest = v
+        while e is not None:
+            src = e.other(dest)
+            de = DirectedEdge(src,dest,e.weight, e.travelTime, e.costs)
+            path.append(de)
+            e = self.edgeTo[src]
+            dest = src
+        return path
+
+
     def createPath(self, v, w, weight, travelTimes, costs):
         e1 = Edge(v,w,weight, travelTimes, costs)
         self.path.append(e1)
@@ -151,10 +196,23 @@ class CableCarSystem:
 
 ccs = CableCarSystem()
 ccs.readGraph("cablecar.txt")
-type = "distance"    #question 5a - distance, question 5b - costs, question 5c - travelTime
-ccs.primsAlgo(type)
-for e in ccs.edges():
-    eV = e.either() #get left node
-    eW = e.other(eV) #get right node
-    ccs.createPath(eV, eW, e.weight, e.travelTime, e.costs)
-ccs.drawGraph("cablecargenerate.png", type)
+type = "costs"    #question 5a - distance, question 5b - costs, question 5c - travelTime
+
+if type is "distance" or type is "costs":
+    ccs.primsAlgo(type)
+
+    for e in ccs.edges():
+        eV = e.either() #get left node
+        eW = e.other(eV) #get right node
+        ccs.createPath(eV, eW, e.weight, e.travelTime, e.costs)
+    ccs.drawGraph("cablecargenerate.png", type)
+elif type is "travelTime":
+    s = ccs.V()[9]  #9 becos node 10 is in element [9]
+    ccs.dijkstraAlgo(ccs, s, type)
+    for v in ccs.V():
+        print str(s) + " to " + str(v) + " (" + str(ccs.distTo[v]) + "):",
+        for e in reversed(ccs.pathTo(7)):
+            ccs.createPath(e.src(), e.dest(), e.weight, e.travelTime, e.costs)
+            print str(e.src())+ "->" + str(e.dest()) + " " + str(e.weight) + " ",
+        print
+    ccs.drawGraph("cablecargenerate.png", type)

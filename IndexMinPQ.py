@@ -34,7 +34,7 @@ class IndexMinPQ:
         indexOfMin = self.pq[1]
         self.exch(1, self.N)
         self.N -= 1
-        self.sink(1, type)
+        self.sink(1)
         self.keys[self.pq[self.N+1]] = None
         self.qp[self.pq[self.N+1]] = -1
         return indexOfMin
@@ -44,8 +44,8 @@ class IndexMinPQ:
             return self.keys[self.pq[i]] > self.keys[self.pq[j]]
         elif self.type is "costs":
             return self.keys[self.pq[i]].costs > self.keys[self.pq[j]].costs
-        elif self.type is "travelTime":
-            return self.keys[self.pq[i]].travelTime > self.keys[self.pq[j]].travelTime
+        #elif self.type is "travelTime":
+        #    return self.keys[self.pq[i]].travelTime > self.keys[self.pq[j]].travelTime
 
     def exch(self, i, j):
         t = self.pq[i]
@@ -62,7 +62,7 @@ class IndexMinPQ:
             k = p
             p = int(ceil(k/2.0))
 
-    def sink(self, k, type):
+    def sink(self, k):
         while 2*k <= self.N:
             j = 2 * k
             if j < self.N and self.greater(j, j+1): j += 1

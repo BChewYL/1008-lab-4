@@ -45,7 +45,7 @@ class DijkstraSP:
         dest = v
         while e is not None:
             src = e.other(dest)
-            de = DirectedEdge(src,dest,e.weight)
+            de = DirectedEdge(src,dest,e.weight, 0, 0)
             path.append(de)
             e = self.edgeTo[src]
             dest = src
@@ -74,11 +74,11 @@ class DijkstraSP:
 
 G = EdgeWeightedGraph()
 G.readGraph("tinyEWG.txt")
-s = G.V()[0]
+s = G.V()[5]
 sp = DijkstraSP(G, s, "distance")
 for v in G.V():
     print str(s) + " to " + str(v) + " (" + str(sp.distTo[v]) + "):",
-    for e in reversed(sp.pathTo(v)):
+    for e in reversed(sp.pathTo(6)):
         sp.createPath(e.src(), e.dest(), e.weight, 0, 0)
         print str(e.src())+ "->" + str(e.dest()) + " " + str(e.weight) + " ",
     print

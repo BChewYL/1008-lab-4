@@ -5,10 +5,12 @@ class DirectedEdge:
     w = None # destination vertex
     weight = None # weight
 
-    def __init__(self, v, w, wt):
+    def __init__(self, v, w, wt, travelTime, costs):
         self.v = v
         self.w = w
         self.weight = wt
+        self.travelTime = travelTime
+        self.costs = costs
 
     def src(self):
         return self.v
